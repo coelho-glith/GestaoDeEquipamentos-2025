@@ -42,7 +42,6 @@ internal class Program
             default:
                 Console.WriteLine("Saindo do programa..."); break;
         }
-        Console.ReadLine();
     }
 
     public static void MenuChamado(TelaChamado telaChamado, TelaEquipamento telaEquipamento)
@@ -61,6 +60,5 @@ internal class Program
             default:
                 Console.WriteLine("opção não selecionada corretamente, Desligando programa"); break;
         }
-        Console.ReadLine();
     }
 }
