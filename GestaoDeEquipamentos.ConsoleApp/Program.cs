@@ -1,64 +1,85 @@
-﻿namespace GestaoDeEquipamentos.ConsoleApp;
+﻿
+using GestaoDeEquipamentos.ConsoleApp.Compartilhado;
+using GestaoDeEquipamentos.ConsoleApp.ModuloChamado;
+using GestaoDeEquipamentos.ConsoleApp.ModuloEquipamento;
+using GestaoDeEquipamentos.ConsoleApp.ModuloFabricante;
 
-internal class Program
+namespace GestaoDeEquipamentos.ConsoleApp;
+
+class Program
 {
     static void Main(string[] args)
     {
 
-        TelaEquipamento telaEquipamento = new TelaEquipamento();
-        TelaChamado telaChamado = new TelaChamado();
+        TelaFabricante telaFabricante = new TelaFabricante();
+
+        RepositorioFabricante repositoriofabricante = telaFabricante.repositorioFabricante;
+        TelaEquipamento telaEquipamento = new TelaEquipamento(repositoriofabricante);
+
+        RepositorioEquipamento repositorioEquipamento = telaEquipamento.repositorioEquipamento;
+        TelaChamado telaChamado = new TelaChamado(repositorioEquipamento);
+
+        TelaPrincipal telaPrincipal = new TelaPrincipal();
+
 
         while (true)
         {
-            TelaMenuPrincipal.MostrarMenu();
-            string opcaoEscolhida = Console.ReadLine();
-            switch (opcaoEscolhida)
-            {
-                case "1": MenuEquipamento(telaEquipamento); break;
+            char opcaoPrincipal = telaPrincipal.ApresentarMenuPrincipal();
 
-                case "2": MenuChamado(telaChamado, telaEquipamento); break;
-                default:
-                    Console.WriteLine("Opção não selecionada corretamente, Desligando programa");
-                    return;
+            if (opcaoPrincipal == '1')
+            {
+                char opcaoEscolhida = telaEquipamento.ApresentarMenu();
+
+                switch (opcaoEscolhida)
+                {
+                    case '1': telaEquipamento.CadastrarEquipamento(); break;
+
+                    case '2': telaEquipamento.EditarEquipamento(); break;
+
+                    case '3': telaEquipamento.ExcluirEquipamento(); break;
+
+                    case '4': telaEquipamento.VisualizarEquipamentos(true); break;
+
+                    default: break;
+                }
             }
 
-        }
-    }
+            else if (opcaoPrincipal == '2')
+            {
+                char opcaoEscolhida = telaChamado.ApresentarMenu();
 
-    public static void MenuEquipamento(TelaEquipamento telaEquipamento)
-    {
-        string opcaoEscolhida = telaEquipamento.ApresentarMenu();
+                switch (opcaoEscolhida)
+                {
+                    case '1': telaChamado.CadastrarChamado(); break;
 
-        switch (opcaoEscolhida)
-        {
-            case "1":
-                telaEquipamento.CadastrarEquipamento(); break;
-            case "2":
-                telaEquipamento.EditarEquipamento(); break;
-            case "3":
-                telaEquipamento.ExcluirEquipamento(); break;
-            case "4":
-                telaEquipamento.VisualizarEquipamentos(true); break;
-            default:
-                Console.WriteLine("Saindo do programa..."); break;
-        }
-    }
+                    case '2': telaChamado.EditarChamado(); break;
 
-    public static void MenuChamado(TelaChamado telaChamado, TelaEquipamento telaEquipamento)
-    {
-        string opcaoEscolhida = telaChamado.ApresentarMenuChamado();
-        switch (opcaoEscolhida)
-        {
-            case "1":
-                telaChamado.RegistrarChamado(telaEquipamento); break;
-            case "2":
-                telaChamado.EditarChamado(telaEquipamento); break;
-            case "3":
-                telaChamado.ExcluirChamado(); break;
-            case "4":
-                telaChamado.VisualizarChamados(true); break;
-            default:
-                Console.WriteLine("opção não selecionada corretamente, Desligando programa"); break;
+                    case '3': telaChamado.ExcluirChamado(); break;
+
+                    case '4': telaChamado.VisualizarChamados(true); break;
+
+                    default: break;
+                }
+            }
+
+            else if (opcaoPrincipal == '3')
+            {
+                char opcaoEscolhida = telaFabricante.ApresentarMenu();
+
+                switch (opcaoEscolhida)
+                {
+                    case '1': telaFabricante.CadastrarFabricante(); break;
+
+                    case '2': telaFabricante.EditarFabricante(); break;
+
+                    case '3': telaFabricante.ExcluirFabricante(); break;
+
+                    case '4': telaFabricante.VisualizarFabricantes(true); break;
+
+                    default: break;
+                }
+            }
+                Console.ReadLine();
         }
     }
 }
